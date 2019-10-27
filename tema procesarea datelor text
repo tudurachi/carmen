@@ -1,0 +1,77 @@
+# import libraries
+import urllib.request as urllib2
+from bs4 import BeautifulSoup
+import csv
+from datetime import datetime
+# specify the url
+quote_page = "https://www.emag.ro/laptop-hp-15-ra060nq-cu-procesor-intelr-celeronr-n3060-pana-la-2-48-ghz-15-6-4gb-500gb-dvd-rw-intelr-hd-graphics-400-freedos-black-3qt74ea/pd/DPJQFSBBM/"
+
+# query the website and return the html to the object ‘page’
+page = urllib2.urlopen(quote_page)
+
+# parse the html using beautiful soup and store in variable `soup`
+soup = BeautifulSoup(page,'html.parser')
+
+######Cod produs >Elena
+cod_box = soup.find('span', attrs={'class': 'product-code-display pull-left'})
+codProduct = cod_box.text
+print(codProduct)
+
+######pret curent >Carmen
+price_box = soup.find('p',  attrs={'class':'product-new-price'})
+priceProduct = price_box.text.strip()
+# stergem Lei
+priceProduct1=priceProduct.replace('Lei', '')
+#stergem punctul 
+priceProduct1=priceProduct1.replace('.', '')
+# transformam in integer
+priceProduct1=int(priceProduct1)
+priceProduct1=priceProduct1/100
+print(priceProduct1)
+
+#######pret vechi >Elena
+old_price_box = soup.find('p', attrs={'class':'product-old-price'})
+oldpriceProduct = old_price_box.text.strip()
+## stergem Lei
+oldpriceProduct1=oldpriceProduct.replace('Lei', '')
+#stergem punctul 
+oldpriceProduct1=oldpriceProduct1.replace('.', '')
+#stergem spatiile intre 119999 si (-29%)
+oldpriceProduct1=oldpriceProduct1.replace(' ', '')
+oldpriceProduct1=oldpriceProduct1.translate({ord(i): None for i in ' '})
+## stergem (-29%)
+start = 7
+stop = 14
+# Remove charactes from index 7 to 14
+if len(oldpriceProduct1) > stop :
+    oldpriceProduct1 = oldpriceProduct1[0: start:] + oldpriceProduct1[stop + 1::]
+##transformam in integer 
+oldpriceProduct1=int(oldpriceProduct1)
+oldpriceProduct1=oldpriceProduct1/100
+print(oldpriceProduct1)
+
+########## numar total de review-uri >Carmen
+review_box = soup.find('a', attrs={'class':'gtm_17kxch'})
+reviewProduct = review_box.text.strip()
+#stergem spatiul
+reviewProduct1=reviewProduct.replace(' ', '')
+reviewProduct1=reviewProduct1.translate({ord(i): None for i in ' '})
+### stergem caracterele Review-uri()
+start = 0
+stop = 10
+# Remove charactes from index 0 to 10
+if len(reviewProduct1) > stop :
+    reviewProduct1 = reviewProduct1[0: start:] + reviewProduct1[stop + 1::]
+reviewProduct1=reviewProduct1.replace(')','')
+reviewProduct1=int(reviewProduct1)
+
+######media notelor  acordate de clienti >Elena
+nota_box = soup.find('span', attrs={'class':'star-rating-text gtm_rp101318'})
+notaProduct = nota_box.text.strip()
+print(notaProduct)
+#######export to excel csv >Carmen
+
+with open('emag.csv', 'a') as csv_file: 
+ writer=csv.writer(csv_file)
+ writer.writerow([priceProduct1, oldpriceProduct1, reviewProduct1, notaProduct])
+
