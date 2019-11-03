@@ -1,0 +1,358 @@
+
+# =============pagina 1================================================================
+# pentru instalat selenium
+# https://bangladroid.wordpress.com/2016/11/20/how-to-install-python-pip-selenium-chrome-driver/
+# pip install -U selenium
+# =============================================================================
+from selenium import webdriver
+from bs4 import BeautifulSoup
+import pandas as pd
+import csv
+# =============================================================================
+# descarc ChromeDriver in functie de versiunea Chrome pe care o am
+# https://chromedriver.chromium.org/downloads
+# aici cum instalez
+# https://www.youtube.com/watch?v=9kWz5tL4D7w
+# =============================================================================
+driver = webdriver.Chrome("C:/webdrivers/chromedriver")
+
+reviews=[] 
+prices=[] 
+oldprices=[] 
+
+driver.get("https://www.emag.ro/laptopuri/p1/c")
+
+content = driver.page_source
+soup = BeautifulSoup(content, features="lxml")
+
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+
+
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop1.csv', index=False, encoding='utf-8')
+
+
+        
+############exemplu pagina 2 ========================
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p2/c")
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop2.csv', index=False, encoding='utf-8')
+
+##################exemplu pagina 3#############
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p3/c")
+
+
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop3.csv', index=False, encoding='utf-8')
+
+
+##################exemplu pagina 4#############
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p4/c")
+
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop4.csv', index=False, encoding='utf-8')
+
+##################exemplu pagina 5#############
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p5/c")
+
+content = driver.page_source
+soup = BeautifulSoup(content, features="lxml")
+
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop5.csv', index=False, encoding='utf-8')
+
+##################exemplu pagina 6#############
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p6/c")
+
+content = driver.page_source
+soup = BeautifulSoup(content, features="lxml")
+
+
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop6.csv', index=False, encoding='utf-8')
+
+##################exemplu pagina 7#############
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p7/c")
+
+content = driver.page_source
+soup = BeautifulSoup(content, features="lxml")
+
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop7.csv', index=False, encoding='utf-8')
+
+##################exemplu pagina 8#############
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p8/c")
+
+
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop8.csv', index=False, encoding='utf-8')
+
+##################exemplu pagina 9#############
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p9/c")
+
+content = driver.page_source
+soup = BeautifulSoup(content, features="lxml")
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop9.csv', index=False, encoding='utf-8')
+
+##################exemplu pagina 10#############
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p10/c")
+
+content = driver.page_source
+soup = BeautifulSoup(content, features="lxml")
+
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop10.csv', index=False, encoding='utf-8')
+
+##################exemplu pagina 11#############
+        
+reviews=[] #List to store name of the product
+prices=[] #List to store price of the product
+oldprices=[] #List to store brand of the product
+
+driver.get("https://www.emag.ro/laptopuri/p11/c")
+
+content = driver.page_source
+soup = BeautifulSoup(content, features="lxml")
+
+
+
+for a in soup.findAll('div', attrs={'class':'card-item js-product-data'}):
+        review=a.find('div', attrs={'class':'star-rating-text'})
+        price=a.find('p', attrs={'class':'product-new-price'})
+        oldprice=a.find('p', attrs={'class':'product-old-price'})
+        reviews.append(review.text)
+        prices.append(price.text)
+        oldprices.append(oldprice.text)
+        
+df = pd.DataFrame({'Review':reviews,'Price':prices,'Oldprice':oldprices}) 
+df.to_csv('products_laptop11.csv', index=False, encoding='utf-8')
+
+###########concatenare toate fisierele csv obtinute din cele 11 pagini
+import os
+import glob
+import pandas
+def concatenate (indir="C:\Users\Carmen\Desktop\procesarea datelor text\tema 30 oct", outfile="C:\Users\Carmen\Desktop\procesarea datelor text\tema 30 oct\concateneted.csv"):
+    os.chdir(indir)
+    fileList=glob.glob("*.csv")
+    dfList=[]
+    colnames=["Review", "Price", "Oldprice"]
+    for filename in fileList:
+        print(filename)
+        df=pandas.read_csv(filename, header=None)
+        dfList.append(df)
+        concatDf=pandas.concat(dfList, axis=0)
+        concatDf.columns=colnames
+        concatDf.to_csv(outfile, index=None)        
+
+##in consola trebuie scris concatenate() si enter
+##am obtinut un fisier concatenated.csv cu datele de pe cele 11 pagini
+###importam fisierul concatenated pentru corectari
+import pandas as pd
+laptop= pd.read_csv('concatenated.csv' )
+#####coloana PRICE
+##stergem 'de la' 
+laptop['Price']=laptop.Price.str.replace("de la", "")
+##stergem spatiul
+laptop['Price']=laptop.Price.str.replace(" ", "")
+#stergem Lei
+laptop['Price']=laptop.Price.str.replace("Lei", "")
+#stergem .
+laptop['Price']=laptop.Price.str.replace(".", "")
+#transformam in integer
+laptop['Price'] = pd.to_numeric(laptop['Price'])
+laptop['Price']=laptop.Price/100
+
+#####coloana REVIEW
+split_names = (laptop['Review']
+    .str.strip()
+    .str.split(' ', n=1, expand=True)
+    .rename(columns={0:'Review_corect', 1:'drop'}))
+#Then: add this split name to your dataframe using pd.concat():
+laptop = pd.concat([laptop, split_names], axis=1)
+
+########coloana OLDPRICES
+split_names1 = (laptop['Oldprice']
+    .str.strip()
+    .str.split(' ', n=1, expand=True)
+    .rename(columns={0:'Oldprice_corect', 1:'dropprice'}))
+#Then: add this split name to your dataframe using pd.concat():
+laptop = pd.concat([laptop, split_names1], axis=1)
+
+#stergem .
+laptop['Oldprice_corect']=laptop.Oldprice_corect.str.replace(".", "")
+#transformam in integer
+laptop['Oldprice_corect'] = pd.to_numeric(laptop['Oldprice_corect'])
+laptop['Oldprice_corect'] =laptop.Oldprice_corect/100
+
+### stergem unele coloane inutile
+laptop=laptop.drop(laptop.columns[[0, 2, 4, 6]], axis=1)
+### redenumim coloanele 1 si 2
+laptop = laptop.rename(columns={'Review_corect': 'Review', 'Oldprice_corect': 'Oldprice'})
+#rearanjam coloanele
+laptop = laptop[['Price', 'Oldprice', 'Review']]
+#salvam fisierul obtinut
+laptop.to_csv('laptop_emag.csv', index=False, encoding='utf-8')
+
+from pandas import read_csv
+import pandas as pd
+laptop = read_csv('laptop_emag.csv')
+
+#analiza descriptiva a variabilelor numerice
+variabile_numerice =laptop[['Price','Oldprice','Review']]
+#print('\nIndicatorii descriptivi ai variabilelor numerice sunt\n')
+#print(variabile_numerice.describe())
+
+#print('\n\nMedianele variabilelor numerice sunt\n')
+#print(variabile_numerice.median())
+
+from scipy.stats import mode
+#print('\n\nModul pentru fiecare variabila numerica este\n')
+#print(mode(variabile_numerice))
+
+from scipy.stats import skew
+#print ('\n\nAsimetria pentru fiecare variabila numerica este\n')
+#print(skew(variabile_numerice))
+
+from scipy.stats import kurtosis
+#print('\n\nBoltirea pentru fiecare variabila numerica este\n')
+#print(kurtosis(variabile_numerice))
+
+#analiza grafica a variabilelor numerice
+
+#print(laptop.hist('Price',bins=(100,500,1000,2000,3000,4000,5000)))
+#print(laptop.hist('Oldprice', bins=(100,500,1000,2000,3000,4000,5000)))
+#print(laptop.hist('Review', bins=(0,10,20,30,40,50,60,70)))
