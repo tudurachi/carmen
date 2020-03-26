@@ -1,0 +1,138 @@
+setwd("C:/Users/Carmen/Desktop/retele neurale/churn")
+churn<-read.csv("Churn_Modelling.csv")
+attach(churn)
+install.packages("neuralnet")
+library(neuralnet)
+library(nnet)
+library(plyr)
+
+churn<-churn[, -c(1,2,3)]
+churn <- churn[complete.cases(churn),]
+str(churn)
+
+boxplot(churn$CreditScore)$out
+boxplot(churn$Age)$out
+boxplot(churn$Tenure)$out
+boxplot(churn$Balance)$out
+boxplot(churn$EstimatedSalary)$out
+
+hist(churn$Age, main = "age distribution")
+hist(churn$Balance, main = "Balance")
+hist(churn$EstimatedSalary, main = "Estimated Salary")
+hist(churn$CreditScore, main = "Scorul creditului")
+
+plot(churn$Geography, main = "Tari")
+plot(churn$Gender, main = "Sexul")
+barplot(table(churn$HasCrCard), ylab="Frecventa",main = "Detinator de card de credit")
+barplot(table(churn$Tenure), ylab="Frecventa", main = "Vechimea")
+barplot(table(churn$NumOfProducts), ylab="Frecventa", main = "Numarul de produse")
+barplot(table(churn$IsActiveMember), ylab="Frecventa", main = "Membru activ")
+barplot(table(churn$Exited), ylab="Frecventa", main = "Rezilieri")
+
+#transformarea variabilelor factor in variabile dummy
+
+levels(churn$Gender)<-c("0","1")
+churn$Gender<-as.numeric(as.character(churn$Gender))
+
+levels(churn$Geography)<-c("0","1","2")
+churn$Geography<-as.numeric(as.character(churn$Geography))
+
+#transformarea celorlate variabile poate fi facuta astfel
+churn$CreditScore<-as.numeric(as.character(churn$CreditScore))
+churn$Age<-as.numeric(as.character(churn$Age))
+churn$Tenure<-as.numeric(as.character(churn$Tenure))
+churn$NumOfProducts<-as.numeric(as.character(churn$NumOfProducts))
+churn$HasCrCard<-as.numeric(as.character(churn$HasCrCard))
+churn$IsActiveMember<-as.numeric(as.character(churn$IsActiveMember))
+churn$Exited<-as.numeric(as.character(churn$Exited))
+
+
+#model de regresie logistica binomiala
+#impartirea datelor in doua seturi de date: training si testare
+install.packages("caTool")
+library(caTools)
+set.seed(123)
+indices = sample.split(churn$Exited, SplitRatio = 0.7)
+train = churn[indices,]
+validation = churn[!(indices),]
+
+model_1 = glm(Exited ~ ., data = train, family = "binomial")
+summary(model_1)
+
+#alegerea celor mai potrivite variabile prin algoritmul stepwise
+install.packages("MASS")
+library(MASS)
+model_2<- stepAIC(model_1, direction="both")
+summary(model_2)
+
+#verificarea multicoliniaritatii
+install.packages("car")
+library(car)
+vif(model_2)
+#eliminiarea variabilei Numar de produse
+model_3 = glm(Exited ~ CreditScore+Geography+Gender+Age+Balance+IsActiveMember, data = train, family = "binomial")
+summary(model_3)
+
+#evaluarea modelului
+
+pred <- predict(model_3, type = "response", newdata = validation[,-11])
+summary(pred)
+validation$prob <- pred
+
+# pragul 50% pt probabilitati si trandormarea lor in valori binare
+
+pred_churn <- factor(ifelse(pred >= 0.50, "Yes", "No"))
+actual_churn <- factor(ifelse(validation$Exited==1,"Yes","No"))
+table(actual_churn,pred_churn)
+
+#acuratetea
+prag_churn <- factor(ifelse(pred >=0.50, "Yes", "No"))
+install.packages("caret")
+library(caret)
+matrice_confuzie <- confusionMatrix(prag_churn, actual_churn, positive = "Yes")
+accuracy <- matrice_confuzie$overall[1]
+summary(accuracy)
+
+#Rescalarea
+##Standardizarea
+churn <-scale(churn)
+str(churn)
+
+#formula retelei neurale
+f<-Exited~CreditScore+Geography+Gender+Age+Tenure+Balance+NumOfProducts+HasCrCard+IsActiveMember+EstimatedSalary
+
+#asigurarea replicabilitatii rezultatelor
+set.seed(1)#setarea unei samante de aleator
+n=nrow(churn)
+train<-sample(1:n, 7000, FALSE)
+#setul de date a fost impartit in doua doua seturi train si testare
+
+#estimarea retelie neurale MPL
+fit<-neuralnet(f,data=churn[train,], hidden=2, algorithm = "rprop+", err.fct = "sse", act.fct = "logistic", linear.output = FALSE, stepmax = 1e9)
+print(fit)
+
+#vizualizarea retelei neurale MLP
+plot(fit, intercept=FALSE, show.weights=FALSE)
+
+#atributele obiectului fit
+attributes(fit)
+
+fit$result.matrix
+
+#comparam rezultatele cu figura obtinuta mai jos , avem si biasurile pt stratul ascuns si cel de iesire si ponderile pf fiecae neuron
+plot(fit, intercept=TRUE, show.weights=TRUE)
+
+#previziuni pe baza RN
+pred<-compute(fit, churn[-train,c(1:10)])
+head(pred$net.result)
+
+#valorile obtinute sunt probabilitati si pot fi transf in valori binare (-1 si 1), pragul fiind 0,5
+r2<-ifelse(pred$net.result<=0.5,-1,1)
+head(r2)
+print(pred)
+#tabelul de contingentza(confusion matrix)
+table(sign(r2),sign(churn[-train,1]),dnn=c("Predicted", "Observed"))
+
+#rata de eroare de clasificare
+error_rate=(1-sum(sign(r2)==sign(churn[-train,1]))/10000)
+round(error_rate,3)
